@@ -138,17 +138,5 @@
     ],
     "example_image": "https://res.cloudinary.com/dopmj1ksm/image/upload/v1771506809/rjyxzkiiqyu2dutqmyu2.jpg",
     "order": 2
-  },
-  {
-    "id": "srv_1772923111285_z5lb2bzz0",
-    "created_date": "2026-03-07T22:38:31.285Z",
-    "updated_date": "2026-03-07T22:38:31.285Z",
-    "title": "test",
-    "category": "Weddings",
-    "description": "test",
-    "pricing_info": "343",
-    "features": [],
-    "example_image": "",
-    "order": 0
   }
 ]
