@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Αιτήματα Πελατών - Rose Flower Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans:['Inter','sans-serif'], serif:['Playfair Display','serif'] },
+          colors: { rose: { 50:'#fff1f2',100:'#ffe4e6',200:'#fecdd3',600:'#e11d48',700:'#be123c' } }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+    .fade-in{animation:fadeIn .5s ease-out forwards}
+    .toast{position:fixed;top:20px;right:20px;z-index:9999;animation:slideIn .3s ease-out}
+    .stagger-1{animation-delay:.05s;opacity:0}
+    .stagger-2{animation-delay:.10s;opacity:0}
+    .stagger-3{animation-delay:.15s;opacity:0}
+    .stagger-4{animation-delay:.20s;opacity:0}
+    .stagger-5{animation-delay:.25s;opacity:0}
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans min-h-screen">
+
+<!-- ============ NAVBAR ============ -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-20">
+      <a href="index.html" class="flex items-center space-x-2">
+        <span class="text-2xl font-serif font-bold text-rose-600">Rose</span>
+        <span class="text-xl font-light text-gray-600">Flower Shop</span>
+      </a>
+      <nav class="hidden md:flex space-x-8 items-center">
+        <a href="index.html"           class="text-gray-700 hover:text-rose-600 transition font-medium">Αρχική</a>
+        <a href="about.html"           class="text-gray-700 hover:text-rose-600 transition font-medium">Σχετικά</a>
+        <a href="services-public.html" class="text-gray-700 hover:text-rose-600 transition font-medium">Υπηρεσίες</a>
+        <a href="gallery-public.html"  class="text-gray-700 hover:text-rose-600 transition font-medium">Συλλογή</a>
+        <a href="contact-public.html"  class="text-gray-700 hover:text-rose-600 transition font-medium">Επικοινωνία</a>
+        <button id="logout-btn" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Αποσύνδεση</button>
+      </nav>
+      <button id="mobile-menu-button" class="md:hidden text-gray-600 hover:text-rose-600">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      <a href="index.html"           class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Αρχική</a>
+      <a href="about.html"           class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Σχετικά</a>
+      <a href="services-public.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Υπηρεσίες</a>
+      <a href="gallery-public.html"  class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Συλλογή</a>
+      <a href="contact-public.html"  class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Επικοινωνία</a>
+      <button id="logout-btn-mobile" class="w-full text-left px-3 py-2 rounded-md text-base font-medium text-rose-600 hover:bg-gray-50">Αποσύνδεση</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MAIN ============ -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- Header -->
+  <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
+    <div class="mb-4 md:mb-0">
+      <a href="admin.html" class="inline-flex items-center text-gray-600 hover:text-rose-600 transition mb-4">
+        <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>Πίσω στη Διαχείριση
+      </a>
+      <h1 class="text-4xl font-serif font-bold text-gray-900 mb-2">Αιτήματα Πελατών</h1>
+      <p class="text-gray-600">Διαχειριστείτε τα αιτήματα επικοινωνίας</p>
+    </div>
+    <div class="self-start md:self-auto">
+      <select id="status-filter" class="w-full md:w-48 px-4 py-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent transition">
+        <option value="all">Όλα τα αιτήματα</option>
+        <option value="new">Νέα</option>
+        <option value="contacted">Σε επικοινωνία</option>
+        <option value="completed">Ολοκληρωμένα</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- GitHub Token Banner (same pattern as services-manage / gallery-manage) -->
+  <div id="token-banner" class="mb-6 bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+    <div class="flex-1">
+      <p class="font-semibold text-amber-800">⚙️ Σύνδεση με GitHub</p>
+      <p class="text-sm text-amber-700 mt-1">Εισάγετε το GitHub Personal Access Token σας ώστε να μπορείτε να ενημερώνετε την κατάσταση και να διαγράφετε αιτήματα.</p>
+    </div>
+    <div class="flex gap-2 flex-shrink-0">
+      <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx"
+        class="px-3 py-2 border border-amber-300 rounded-lg text-sm w-52 focus:outline-none focus:ring-2 focus:ring-amber-400">
+      <button id="save-token-btn" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Αποθήκευση</button>
+    </div>
+  </div>
+  <div id="token-ok-banner" class="hidden mb-6 bg-green-50 border border-green-200 rounded-2xl p-4 flex items-center justify-between">
+    <p class="text-green-800 text-sm font-medium">✅ Token αποθηκεύτηκε — μπορείτε να ενημερώνετε και να διαγράφετε αιτήματα.</p>
+    <button id="change-token-btn" class="text-green-700 underline text-sm ml-4">Αλλαγή</button>
+  </div>
+
+  <!-- Inquiries List -->
+  <div id="inquiries-container">
+    <div id="loading-spinner" class="flex justify-center items-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-600"></div>
+    </div>
+    <div id="empty-state" class="hidden bg-gray-50 rounded-2xl p-12 text-center">
+      <i data-lucide="message-square" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+      <p class="text-gray-600">Δεν υπάρχουν αιτήματα ακόμη</p>
+      <p class="text-gray-500 text-sm mt-2">Όταν κάποιος συμπληρώσει τη φόρμα επικοινωνίας, το αίτημα θα εμφανιστεί εδώ.</p>
+    </div>
+    <div id="inquiries-list" class="space-y-4"></div>
+  </div>
+
+</main>
+
+<div id="toast-container"></div>
+
+<!-- ============ JAVASCRIPT ============ -->
+<script>
+// ── Auth guard ──
+if (sessionStorage.getItem('admin_auth') !== 'true') window.location.href = 'admin.html';
+
+// ── GitHub config ──
+const GITHUB_OWNER = 'roseflowershop3';
+const GITHUB_REPO  = 'RoseFlowerShop';
+const GITHUB_FILE  = 'inquiries-data.json';
+const RAW_URL      = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/main/${GITHUB_FILE}`;
+
+// ── Token management (shared sessionStorage key with services/gallery manage) ──
+function getToken() { return sessionStorage.getItem('github_token') || ''; }
+function updateTokenUI() {
+  const has = !!getToken();
+  document.getElementById('token-banner').classList.toggle('hidden', has);
+  document.getElementById('token-ok-banner').classList.toggle('hidden', !has);
+}
+document.getElementById('save-token-btn').addEventListener('click', () => {
+  const val = document.getElementById('github-token-input').value.trim();
+  if (!val) return showToast('Εισάγετε ένα έγκυρο token', 'error');
+  sessionStorage.setItem('github_token', val);
+  updateTokenUI();
+  showToast('Token αποθηκεύτηκε!', 'success');
+  loadAndRender(); // reload so any pending items from localStorage also show
+});
+document.getElementById('change-token-btn').addEventListener('click', () => {
+  sessionStorage.removeItem('github_token');
+  updateTokenUI();
+});
+
+// ── Toast ──
+function showToast(msg, type='success') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast px-6 py-4 rounded-lg shadow-lg text-white ${type==='success'?'bg-green-600':'bg-red-600'}`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => { t.style.animation='slideIn .3s ease-out reverse'; setTimeout(()=>t.remove(),300); }, 3500);
+}
+
+// ── Date formatters ──
+function formatDate(dateString) {
+  const d = new Date(dateString);
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function formatDateOnly(dateString) {
+  if (!dateString) return '';
+  const d = new Date(dateString);
+  return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+}
+
+// ── Load from GitHub ──
+async function loadInquiries() {
+  try {
+    const res = await fetch(RAW_URL + '?t=' + Date.now());
+    if (!res.ok) return [];
+    return await res.json();
+  } catch (e) { return []; }
+}
+
+// ── Save to GitHub ──
+async function saveInquiries(inquiries) {
+  const token = getToken();
+  if (!token) { showToast('Χρειάζεστε GitHub token για να αποθηκεύσετε αλλαγές', 'error'); return false; }
+
+  const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(inquiries, null, 2))));
+
+  let sha = null;
+  try {
+    const info = await fetch(apiUrl, { headers: { Authorization: `token ${token}` } });
+    if (info.ok) sha = (await info.json()).sha;
+  } catch (e) {}
+
+  const body = { message: 'Update inquiry status', content, ...(sha ? { sha } : {}) };
+  const res = await fetch(apiUrl, {
+    method: 'PUT',
+    headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    showToast('GitHub σφάλμα: ' + (err.message || 'unknown'), 'error');
+    return false;
+  }
+  return true;
+}
+
+// ── State ──
+let allInquiries = [];
+
+// ── Status config ──
+const statusLabels = { new:'Νέο', contacted:'Σε επικοινωνία', completed:'Ολοκληρωμένο' };
+const statusColors = { new:'bg-blue-100 text-blue-800', contacted:'bg-yellow-100 text-yellow-800', completed:'bg-green-100 text-green-800' };
+
+// ── Render ──
+function renderInquiries() {
+  const filter = document.getElementById('status-filter').value;
+  const sorted = [...allInquiries].sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+  const filtered = filter === 'all' ? sorted : sorted.filter(inq => inq.status === filter);
+
+  const list   = document.getElementById('inquiries-list');
+  const empty  = document.getElementById('empty-state');
+  const spinner = document.getElementById('loading-spinner');
+  spinner.classList.add('hidden');
+
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+  } else {
+    empty.classList.add('hidden');
+    list.innerHTML = filtered.map((inquiry, index) => `
+      <div class="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 fade-in stagger-${(index % 5) + 1}">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-xl font-serif font-semibold text-gray-900">${escapeHtml(inquiry.name)}</h3>
+              <span class="px-3 py-1 rounded-full text-xs font-medium ${statusColors[inquiry.status || 'new']}">
+                ${statusLabels[inquiry.status || 'new']}
+              </span>
+            </div>
+            <div class="space-y-2 text-sm text-gray-600 mb-4">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="mail" class="w-4 h-4"></i>
+                <a href="mailto:${escapeHtml(inquiry.email)}" class="hover:text-rose-600 transition">${escapeHtml(inquiry.email)}</a>
+              </div>
+              ${inquiry.phone ? `
+              <div class="flex items-center space-x-2">
+                <i data-lucide="phone" class="w-4 h-4"></i>
+                <a href="tel:${escapeHtml(inquiry.phone)}" class="hover:text-rose-600 transition">${escapeHtml(inquiry.phone)}</a>
+              </div>` : ''}
+              ${inquiry.event_date ? `
+              <div class="flex items-center space-x-2">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+                <span>${formatDateOnly(inquiry.event_date)}</span>
+              </div>` : ''}
+              ${inquiry.event_type ? `
+              <div class="flex items-center space-x-2">
+                <i data-lucide="tag" class="w-4 h-4"></i>
+                <span><strong>Τύπος:</strong> ${escapeHtml(inquiry.event_type)}</span>
+              </div>` : ''}
+              ${inquiry.service_type ? `
+              <div class="flex items-center space-x-2">
+                <i data-lucide="wrench" class="w-4 h-4"></i>
+                <span><strong>Υπηρεσία:</strong> ${escapeHtml(inquiry.service_type)}</span>
+              </div>` : ''}
+            </div>
+            <div class="bg-gray-50 rounded-lg p-4 mb-3">
+              <p class="text-gray-700 whitespace-pre-wrap">${escapeHtml(inquiry.message)}</p>
+            </div>
+            <div class="text-xs text-gray-500">Λήφθηκε: ${formatDate(inquiry.created_date)}</div>
+          </div>
+          <div class="flex md:flex-col gap-2 w-full md:w-48">
+            <select onchange="updateStatus('${inquiry.id}', this.value)"
+              class="flex-1 md:w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-rose-500 focus:border-transparent transition">
+              <option value="new"       ${inquiry.status === 'new'       ? 'selected' : ''}>Νέο</option>
+              <option value="contacted" ${inquiry.status === 'contacted' ? 'selected' : ''}>Σε επικοινωνία</option>
+              <option value="completed" ${inquiry.status === 'completed' ? 'selected' : ''}>Ολοκληρωμένο</option>
+            </select>
+            <button onclick="deleteInquiry('${inquiry.id}')"
+              class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition flex items-center justify-center">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+}
+
+// ── XSS protection ──
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Update status ──
+async function updateStatus(id, newStatus) {
+  const idx = allInquiries.findIndex(inq => inq.id === id);
+  if (idx === -1) return;
+  allInquiries[idx].status       = newStatus;
+  allInquiries[idx].updated_date = new Date().toISOString();
+  const ok = await saveInquiries(allInquiries);
+  if (ok) { showToast('Η κατάσταση ενημερώθηκε', 'success'); renderInquiries(); }
+}
+window.updateStatus = updateStatus;
+
+// ── Delete inquiry ──
+async function deleteInquiry(id) {
+  if (!confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το αίτημα;')) return;
+  allInquiries = allInquiries.filter(inq => inq.id !== id);
+  const ok = await saveInquiries(allInquiries);
+  if (ok) { showToast('Το αίτημα διαγράφηκε', 'success'); renderInquiries(); }
+}
+window.deleteInquiry = deleteInquiry;
+
+// ── Load and render ──
+async function loadAndRender() {
+  document.getElementById('loading-spinner').classList.remove('hidden');
+  document.getElementById('empty-state').classList.add('hidden');
+  document.getElementById('inquiries-list').innerHTML = '';
+  allInquiries = await loadInquiries();
+  renderInquiries();
+}
+
+// ── Events ──
+document.getElementById('status-filter').addEventListener('change', renderInquiries);
+document.getElementById('mobile-menu-button').addEventListener('click', () =>
+  document.getElementById('mobile-menu').classList.toggle('hidden'));
+
+function handleLogout() {
+  sessionStorage.removeItem('admin_auth');
+  sessionStorage.removeItem('admin_user');
+  window.location.href = 'admin.html';
+}
+document.getElementById('logout-btn').addEventListener('click', handleLogout);
+document.getElementById('logout-btn-mobile').addEventListener('click', handleLogout);
+
+// ── Init ──
+window.addEventListener('DOMContentLoaded', async () => {
+  updateTokenUI();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  await loadAndRender();
+});
+</script>
+</body>
+</html>
